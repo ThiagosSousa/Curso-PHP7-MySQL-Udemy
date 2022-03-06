@@ -10,7 +10,7 @@
         <?php
             //Regra de negócio
             $usuarioPossuiCartaoLoja = true;
-            $valorCompra = 350;
+            $valorCompra = 50;
 
             $valorFrete = 50;
             $recebeuDescontoFrete = true;
@@ -28,13 +28,17 @@
 
         <h1>Detalhes do pedido</h1>
         
-        <p>Possui cartão da loja?
+        <p>Possui cartão da loja? <?= /*Com operador ternário <condição> ? true : false;*/$usuarioPossuiCartaoLoja == true ? 'SIM' : 'NÃO';?>
             <?php
+                /*//Com if-else
                 if($usuarioPossuiCartaoLoja){
                     echo 'SIM';
                 } else {
                     echo 'NÃO';
                 }
+                */
+                
+                
             ?>
         </p>
             
@@ -42,11 +46,17 @@
 
         <p>Recebeu desconto no frete?
             <?php
+                //Outra forma de utilização do operador ternário
+
+                $retorno = $recebeuDescontoFrete ? 'SIM' : 'NÃO';
+                echo $retorno;
+                /*
                 if($recebeuDescontoFrete){
                     echo 'SIM';    
                 }else{
                     echo 'NÃO';
                 }
+                */
             ?>
         </p>
 
