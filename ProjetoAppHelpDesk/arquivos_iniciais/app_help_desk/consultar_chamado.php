@@ -1,3 +1,36 @@
+<?php
+  require_once "validador_acesso.php";
+
+  //Chamados
+  $chamados = array();
+
+  //Abrindo o arquivo
+  $arquivo = fopen('../../../../../../app_help_desk/arquivo.txt', 'r');
+
+  //Leitura de todas as linhas do arquivo
+  while(!feof($arquivo)){
+    $linha = fgets($arquivo);
+    
+    //divide os detalhes do registro para verificar o id do usuário
+    $linha_detalhes = explode('#', $linha);
+
+    //Caso o perfil seja 2, só abrir chamado criado pelo usuário
+    if($_SESSION['perfil_id'] == 2){
+      if($_SESSION['id'] != $linha_detalhes[0]){
+        continue;
+      } else {
+        $chamados[] = $linha;
+      }
+    } else {
+      $chamados[] = $linha;
+    }
+    
+  }
+
+  //Fechando o arquivo
+  fclose($arquivo);
+?>
+
 <html>
   <head>
     <meta charset="utf-8" />
@@ -21,6 +54,11 @@
         <img src="logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
         App Help Desk
       </a>
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="logoff.php">Sair</a>
+        </li>
+      </ul>  
     </nav>
 
     <div class="container">    
@@ -33,28 +71,30 @@
             </div>
             
             <div class="card-body">
-              
-              <div class="card mb-3 bg-light">
-                <div class="card-body">
-                  <h5 class="card-title">Título do chamado...</h5>
-                  <h6 class="card-subtitle mb-2 text-muted">Categoria</h6>
-                  <p class="card-text">Descrição do chamado...</p>
 
+              <?php foreach($chamados as $chamado) { ?>
+
+                <?php
+                  $chamado_dados = explode('#', $chamado);
+
+                  if(count($chamado_dados) < 3) {
+                    continue;
+                  }
+                ?>
+                
+                <div class="card mb-3 bg-light">
+                  <div class="card-body">
+                    <h5 class="card-title">Título: <?php echo$chamado_dados[1]?></h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Categoria: <?php echo $chamado_dados[2]?></h6>
+                    <p class="card-text">Descrição: <?php echo $chamado_dados[3]?></p>
+
+                  </div>
                 </div>
-              </div>
-
-              <div class="card mb-3 bg-light">
-                <div class="card-body">
-                  <h5 class="card-title">Título do chamado...</h5>
-                  <h6 class="card-subtitle mb-2 text-muted">Categoria</h6>
-                  <p class="card-text">Descrição do chamado...</p>
-
-                </div>
-              </div>
+              <? } ?>  
 
               <div class="row mt-5">
                 <div class="col-6">
-                  <button class="btn btn-lg btn-warning btn-block" type="submit">Voltar</button>
+                  <a class="btn btn-lg btn-warning btn-block" href="home.php">Voltar</a>
                 </div>
               </div>
             </div>
