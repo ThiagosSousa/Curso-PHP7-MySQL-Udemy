@@ -18,23 +18,19 @@
         let xmlHttp = new XMLHttpRequest();
         xmlHttp.open(
           "GET",
-          "http://localhost/curso desenvolvimento web completo 2022/curso-php7-mysql-udemy/exemplosaula/Ajax/filmes.xml"
+          "http://localhost/curso desenvolvimento web completo 2022/curso-php7-mysql-udemy/exemplosaula/Ajax/filmes.json"
         );
         xmlHttp.onreadystatechange = () => {
           if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-            let XMLFilmes = xmlHttp.responseText;
-            //console.log(XMLFilmes);
-            let parser = new DOMParser();
+            let JSONFilmes = xmlHttp.responseText;
 
-            domFilmes = parser.parseFromString(XMLFilmes, "text/xml");
+            let objJSONFilmes = JSON.parse(JSONFilmes);
+            console.log(objJSONFilmes);
 
-            //console.log(domFilmes);
+            for (let i in objJSONFilmes.filmes) {
+              let item = objJSONFilmes.filmes[i];
+              console.log(item);
 
-            jsonFilmes = xmlToJson(domFilmes);
-            //console.log(jsonFilmes);
-            for (let i in jsonFilmes["filmes"]["filme"]) {
-              console.log(jsonFilmes["filmes"]["filme"][i]);
-              let item = jsonFilmes["filmes"]["filme"][i];
               let divRow = document.createElement("div");
               divRow.className = "row";
               let divCol = document.createElement("div");
@@ -42,26 +38,24 @@
 
               let p1 = document.createElement("p");
 
-              p1.innerHTML =
-                "<strong>Título:</strong> " + item["titulo"]["#text"];
+              p1.innerHTML = "<strong>Título:</strong> " + item.titulo;
 
               let p2 = document.createElement("p");
-              p2.innerHTML =
-                "<strong>Resumo:</strong> " + item["resumo"]["#text"];
+              p2.innerHTML = "<strong>Resumo:</strong> " + item.resumo;
 
-              let genero = "";
-              for (let j in item.genero) {
-                if (genero) genero += ", ";
-                genero += item.genero[j]["#text"];
+              let generos = "";
+              for (let j in item.generos) {
+                if (generos) generos += ", ";
+                generos += item.generos.genero;
               }
 
               let p3 = document.createElement("p");
-              p3.innerHTML = "<strong>Gênero:</strong> " + genero;
+              p3.innerHTML = "<strong>Gênero:</strong> " + generos;
 
               let elenco = "";
-              for (let j in item.elenco.ator) {
+              for (let j in item.elenco) {
                 if (elenco) elenco += ", ";
-                elenco += item.elenco.ator[j]["#text"];
+                elenco += item.elenco[j].ator;
               }
 
               let p4 = document.createElement("p");
@@ -70,9 +64,9 @@
               let p5 = document.createElement("p");
               p5.innerHTML =
                 "<strong>Data de lançamento:</strong> " +
-                item.dataLancamento["#text"] +
+                item.dataLancamento.data +
                 " (" +
-                item.dataLancamento["@attributes"]["pais"] +
+                item.dataLancamento.pais +
                 ")";
 
               let hr = document.createElement("hr");
